@@ -11,7 +11,7 @@ const index = (req, res) => {
   });
 }
 
-const getOne = (req, res) => {
+const show = (req, res) => {
   const { id } = req.params;
   People.findById(id, (err, person) => {
     if (err) {
@@ -58,5 +58,5 @@ module.exports = {
   create,
   update,
   destroy,
-  getOne
+  show
 };
