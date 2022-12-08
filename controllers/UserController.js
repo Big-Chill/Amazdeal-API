@@ -29,7 +29,15 @@ const signup =  async (req, res, next) => {
     return next(errorMsg);
   }
 
-  const newUser = await new User({ email: email, password: hashedPassword });
+  let token;
+  try {
+    token = jwt.sign({ email: email, password: hashedPassword }, 'devils_breath_secret');
+  } catch (error) {
+    const errorMsg = new HttpError('Signing up failed, please try again later.', 500);
+    return next(errorMsg);
+  }
+
+  const newUser = await new User({ email: email, password: hashedPassword, token: token });
 
   try {
     newUser.save();
@@ -38,28 +46,12 @@ const signup =  async (req, res, next) => {
     res.status(500).json({ message: errorMsg.message });
   }
 
-  let token;
-  try {
-    token = jwt.sign({ userId: newUser.id, email: newUser.email }, 'devils_breath_secret');
-  } catch (error) {
-    const errorMsg = new HttpError('Signing up failed, please try again later.', 500);
-    return next(errorMsg);
-  }
-
   return res.status(201).json({ user: newUser.toObject({ getters: true }), token: token });
 };
 
 
 const login = async (req, res, next) => {
-  const { email, password, token } = req.body;
-
-  try {
-    const decodedToken = jwt.verify(token, 'devils_breath_secret');
-    req.userData = { userId: decodedToken.userId };
-  } catch (error) {
-    const errorMsg = new HttpError('You are not authenticated.', 401);
-    return res.status(401).json({ message: errorMsg.message });
-  }
+  const { email, password } = req.body;
 
   let existingUser;
   try {
@@ -87,7 +79,7 @@ const login = async (req, res, next) => {
     return res.status(401).json({ message: errorMsg.message });
   };
 
-  return res.status(200).json({ message: 'Logged in!', user: existingUser.toObject({ getters: true }) });
+  return res.status(200).json({ message: 'Logged in!', user: existingUser.toObject({ getters: true }), token: existingUser.token });
 };
 
 module.exports = { signup, login };
