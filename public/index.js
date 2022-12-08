@@ -1,13 +1,16 @@
-const { PeopleRouter, app, port } = require('../middlewares/index.js');
+const { PeopleRouter, app, port, UserRouter } = require('../middlewares/index.js');
 const PeopleController = require('../controllers/PeopleController.js');
-
-
+const UserController = require('../controllers/UserController.js');
 
 
 PeopleRouter
   .get('/all', PeopleController.index)
-  .get('/individual/:id', PeopleController.getOne)
+  .get('/individual/:id', PeopleController.show)
   .post('/new', PeopleController.create)
   .put('/update/:id', PeopleController.update)
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+UserRouter
+  .post('/signup', UserController.signup)
+  .post('/login', UserController.login)
+
+app.listen(port, () => console.log(`App running on port ${port}!`));
