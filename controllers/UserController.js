@@ -37,9 +37,42 @@ const signup =  async (req, res, next) => {
     res.status(500).json({ message: errorMsg.message });
   }
 
-  res.status(201).json({ user: newUser.toObject({ getters: true }) });
+  return res.status(201).json({ user: newUser.toObject({ getters: true }) });
 };
 
-module.exports = { signup }
+
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email })
+  } catch (error) {
+    const errorMsg = new HttpError('Logging in failed, please try again later.', 500);
+    return next(errorMsg);
+  };
+
+  if (!existingUser) {
+    const errorMsg = new HttpError('User does not exist, please signup instead.', 404);
+    return res.status(401).json({ message: errorMsg.message });
+  };
+
+  let isValidPassword = false;
+  try {
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
+  } catch (error) {
+    const errorMsg = new HttpError('Server error, please try again later.', 500);
+    return next(errorMsg);
+  };
+
+  if (!isValidPassword) {
+    const errorMsg = new HttpError('Wrong password, please try again.', 401);
+    return res.status(401).json({ message: errorMsg.message });
+  };
+
+  return res.status(200).json({ message: 'Logged in!', user: existingUser.toObject({ getters: true }) });
+};
+
+module.exports = { signup, login };
 
 

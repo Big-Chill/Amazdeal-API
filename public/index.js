@@ -11,5 +11,6 @@ PeopleRouter
 
 UserRouter
   .post('/signup', UserController.signup)
+  .post('/login', UserController.login)
 
 app.listen(port, () => console.log(`App running on port ${port}!`));
