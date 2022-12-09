@@ -1,6 +1,5 @@
 const app = require('express')();
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const People = require(path.join(__dirname, '..', 'models', 'people.js'));
 
 

@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const PeopleController = require('../controllers/PeopleController.js');
 const checkAuth = require('../middlewares/check-auth.js');
 
