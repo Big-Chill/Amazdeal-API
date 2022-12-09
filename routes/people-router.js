@@ -10,5 +10,6 @@ router.get('/all', PeopleController.index);
 router.get('/individual/:id', PeopleController.show);
 router.post('/new', PeopleController.create);
 router.put('/update/:id', PeopleController.update);
+router.delete('/delete/:id', PeopleController.destroy);
 
 module.exports = router;
