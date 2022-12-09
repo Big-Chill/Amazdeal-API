@@ -35,6 +35,19 @@ const uploadImage = async (req, res, next) => {
   }
 };
 
+const getProducts = (req, res) => {
+  try {
+    ProductImages.find({}, (err, products) => {
+      if (err) {
+        throw new HttpError('Unable to get products', 500);
+      }
+      res.status(200).json({ message: 'Products fetched successfully', data: products });
+    });
+  } catch (error) {
+    res.status(error.code).json({ message: error.message });
+  }
+};
 
 
-module.exports = { uploadImage, saveDetails };
+
+module.exports = { uploadImage, saveDetails, getProducts };

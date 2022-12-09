@@ -6,7 +6,7 @@ const index = (req, res) => {
   const { id } = req.params;
 
   try {
-    Address.findBy({ user_id: id }, (err, addresses) => {
+    Address.find({ user_id: id }, (err, addresses) => {
       if (err) {
         throw new HttpError("Error in getting addresses", 400);
       }
@@ -17,10 +17,10 @@ const index = (req, res) => {
   }
 };
 
-const createAddress = (req, res) => {
+const createAddress = async (req, res) => {
   const { country, fullName, mobileNumber, pincode, address_line_1, address_line_2, landmark, city, state, is_default_address, address_type, user_id } = req.body;
 
-  const newAddress = new Address({ country, fullName, mobileNumber, pincode, address_line_1, address_line_2, landmark, city, state, is_default_address, address_type, user_id });
+  const newAddress = await new Address({ country, fullName, mobileNumber, pincode, address_line_1, address_line_2, landmark, city, state, is_default_address, address_type, user_id });
 
   try {
     newAddress.save((err, address) => {

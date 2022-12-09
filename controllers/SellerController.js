@@ -6,11 +6,9 @@ const createSeller = async (req, res) => {
   const { firstName, lastName, email, shopAddress, shopName, user_id } = req.body;
 
   const details = { firstName, lastName, email, shopAddress, shopName, user_id }
-  console.log('Details :- ', details);
 
   const newSeller = await new Seller(details);
 
-  console.log('New Seller :- ', newSeller);
   try {
     newSeller.save((err, seller) => {
       if (err) {

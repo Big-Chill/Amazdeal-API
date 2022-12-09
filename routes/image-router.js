@@ -5,8 +5,10 @@ const isSeller = require('../middlewares/check-seller.js');
 const router = express.Router();
 
 router.use(checkAuth);
-router.use(isSeller);
+router.get('/products', ImageController.getProducts);
 
+router.use(isSeller);
 router.post('/upload', ImageController.uploadImage, ImageController.saveDetails);
+
 
 module.exports = router;
