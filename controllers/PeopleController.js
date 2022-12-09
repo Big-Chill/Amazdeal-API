@@ -1,5 +1,6 @@
 const app = require('express')();
 const path = require('path');
+const fs = require('fs');
 const People = require(path.join(__dirname, '..', 'models', 'people.js'));
 
 
@@ -57,10 +58,20 @@ const destroy = (req, res) => {
   });
 };
 
+const upload = (req, res) => {
+  try {
+    res.status(200).json({ message: 'File uploaded successfully', file: req.file });
+  }
+  catch (err) {
+    res.status(500).json({ message: 'Error uploading file', error: err });
+  }
+};
+
 module.exports = {
   index,
   create,
   update,
   destroy,
-  show
+  show,
+  upload
 };

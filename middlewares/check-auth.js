@@ -8,7 +8,7 @@ const checkAuth = (req, res, next) => {
       throw new Error();
     }
     const decodedToken = jwt.verify(token, 'devils_breath_secret');
-    req.userData = { userId: decodedToken.userId };
+    req.userData = { userId: decodedToken };
     next();
   } catch (error) {
     const errorMsg = new HttpError('Authentication failed', 401);
