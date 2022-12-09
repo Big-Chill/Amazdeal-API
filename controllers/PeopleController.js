@@ -58,20 +58,11 @@ const destroy = (req, res) => {
   });
 };
 
-const upload = (req, res) => {
-  try {
-    res.status(200).json({ message: 'File uploaded successfully', file: req.file });
-  }
-  catch (err) {
-    res.status(500).json({ message: 'Error uploading file', error: err });
-  }
-};
 
 module.exports = {
   index,
   create,
   update,
   destroy,
-  show,
-  upload
+  show
 };

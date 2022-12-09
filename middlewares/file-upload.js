@@ -1,42 +1,23 @@
 const multer = require('multer');
 const uuid = require('uuid').v1;
 const path = require('path');
-
-const MIME_TYPE_MAP = {
-  'image/png': 'png',
-  'image/jpeg': 'jpg',
-  'image/jpg': 'jpg',
-};
+const gc = require('../config/google-cloud');
+const bucket = gc.bucket('amazdeal_product_images');
 
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const isValid = MIME_TYPE_MAP[file.mimetype];
-    let error = new Error('Invalid mime type');
-    if (isValid) {
-      error = null;
-    }
-    cb(error, path.join(__dirname, '..', 'uploads', 'images'));
-  },
-  filename: (req, file, cb) => {
-    const name = file.originalname.toLowerCase().split(' ').join('-');
-    const ext = MIME_TYPE_MAP[file.mimetype];
-    cb(null, uuid() + '-' + name + '.' + ext);
-  }
+const uploadImage = (file) => new Promise((resolve, reject) => {
+  const { originalname, buffer } = file;
+  const blob = bucket.file(originalname.replace(/ /g, "_"));
+  const blobStream = blob.createWriteStream({
+    resumable: false,
+  });
+
+  blobStream.on('finish', () => {
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+    resolve(publicUrl);
+  }).on('error', () => {
+    reject(`Unable to upload image, something went wrong`);
+  }).end(buffer);
 });
 
-
-const fileUpload = multer({
-  limits: 500000,
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    const isValid = !!MIME_TYPE_MAP[file.mimetype];
-    let error = new Error('Invalid mime type');
-    if (isValid) {
-      error = null;
-    }
-    cb(error, isValid);
-  }
-});
-
-module.exports = fileUpload;
+module.exports = uploadImage;
