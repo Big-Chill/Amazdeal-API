@@ -2,7 +2,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require(path.join(__dirname, '..', 'models', 'user.js'));
-const HttpError = require(path.join(__dirname, '..', 'models', 'http-error.js'));
+const HttpError = require(path.join(__dirname, '..', 'utils', 'utils.js')).HttpError;
 
 const signup =  async (req, res, next) => {
   const { email, password } = req.body;

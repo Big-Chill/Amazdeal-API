@@ -1,29 +1,10 @@
+const app = require('express')();
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const People = require(path.join(__dirname, '..', 'models', 'people.js'));
 
 
 const index = (req, res) => {
-
-  const { authorization } = req.headers;
-
-  token = authorization.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'devils_breath_secret');
-  } catch (error) {
-    return res.status(401).json({ message: 'Something went wrong' });
-  }
-
-  if (!decodedToken) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
   People.find({}, (err, people) => {
     if (err) {
       console.log(err);
@@ -33,26 +14,6 @@ const index = (req, res) => {
 }
 
 const show = (req, res) => {
-  const { authorization } = req.headers;
-
-  token = authorization.split(' ')[1];
-
-
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'devils_breath_secret');
-  } catch (error) {
-    return res.status(401).json({ message: 'Something went wrong' });
-  }
-
-  if (!decodedToken) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
 
   const { id } = req.params;
   People.findById(id, (err, person) => {
@@ -64,26 +25,6 @@ const show = (req, res) => {
 };
 
 const create = (req, res) => {
-  const { authorization } = req.headers;
-
-  token = authorization.split(' ')[1];
-
-
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'devils_breath_secret');
-  } catch (error) {
-    return res.status(401).json({ message: 'Something went wrong' });
-  }
-
-  if (!decodedToken) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
   const { firstName, lastName, age } = req.body;
 
   const newPerson = new People({ firstName, lastName, age });
@@ -96,25 +37,6 @@ const create = (req, res) => {
 };
 
 const update = (req, res) => {
-  const { authorization } = req.headers;
-  token = authorization.split(' ')[1];
-
-
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'devils_breath_secret');
-  } catch (error) {
-    return res.status(401).json({ message: 'Something went wrong' });
-  }
-
-  if (!decodedToken) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
   const { id } = req.params;
   const { firstName, lastName, age } = req.body;
 
@@ -127,26 +49,6 @@ const update = (req, res) => {
 };
 
 const destroy = (req, res) => {
-  const { authorization } = req.headers;
-  token = authorization.split(' ')[1];
-
-
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'devils_breath_secret');
-  } catch (error) {
-    return res.status(401).json({ message: 'Something went wrong' });
-  }
-
-  if (!decodedToken) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-
   const { id } = req.params;
   People.findByIdAndDelete(id, (err, person) => {
     if (err) {

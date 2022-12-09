@@ -11,4 +11,13 @@ const tokenGenerator = () => {
   return randomAlphanumeric(token_length);
 }
 
-module.exports = { id_generator, isValidEmail, tokenGenerator };
+class HttpError extends Error {
+  constructor(message, errorCode) {
+    super(message);
+    this.code = errorCode;
+  }
+}
+
+
+
+module.exports = { isValidEmail, tokenGenerator, HttpError };
