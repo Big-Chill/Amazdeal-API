@@ -2,7 +2,7 @@ const path = require('path');
 const Seller = require(path.join(__dirname, '..', 'models', 'seller.js'));
 const HttpError = require(path.join(__dirname, '..', 'utils', 'utils.js')).HttpError;
 
-const createSeller = async (req, res) => {
+const createSeller = async (req, res, next) => {
   const { firstName, lastName, email, shopAddress, shopName, user_id } = req.body;
 
   const details = { firstName, lastName, email, shopAddress, shopName, user_id }
@@ -14,7 +14,8 @@ const createSeller = async (req, res) => {
       if (err) {
         throw new HttpError("Error in creating seller", 400);
       }
-      res.status(201).json({message: 'Seller created successfully', seller: seller});
+      req.isSeller = true;
+      next();
     })
   } catch (error) {
     res.status(400).json({message: error.message});

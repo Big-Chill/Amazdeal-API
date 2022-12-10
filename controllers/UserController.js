@@ -37,7 +37,7 @@ const signup =  async (req, res, next) => {
     return next(errorMsg);
   }
 
-  const newUser = await new User({ email: email, password: hashedPassword, token: token });
+  const newUser = await new User({ email: email, password: hashedPassword, token: token, isSeller: false });
 
   try {
     newUser.save();
@@ -82,6 +82,20 @@ const login = async (req, res, next) => {
   return res.status(200).json({ message: 'Logged in!', user: existingUser.toObject({ getters: true }), token: existingUser.token });
 };
 
-module.exports = { signup, login };
+
+const updateUserInfo = (req, res) => {
+  const { email, isSeller } = req.body;
+
+  User.findOneAndUpdate({ email: email }, { isSeller: true }, { new: true }, (err, user) => {
+    if (err) {
+      return res.status(500).json({ message: 'Server error, please try again later.' });
+    } else {
+      return res.status(200).json({ message: 'User updated!', user: user.toObject({ getters: true }) });
+    }
+  });
+};
+
+
+module.exports = { signup, login, updateUserInfo };
 
 

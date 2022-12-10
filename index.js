@@ -9,6 +9,7 @@ const UserRouter = require(path.join(__dirname, 'routes', 'user-router.js'));
 const ImageRouter = require(path.join(__dirname, 'routes', 'image-router.js'));
 const SellerRouter = require(path.join(__dirname, 'routes', 'seller-router.js'));
 const AddressRouter = require(path.join(__dirname, 'routes', 'address-router.js'));
+const OrderRouter = require(path.join(__dirname, 'routes', 'order-router.js'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,6 +36,7 @@ app.use('/user', UserRouter);
 app.use('/image', ImageRouter);
 app.use('/seller', SellerRouter);
 app.use('/address', AddressRouter);
+app.use('/order', OrderRouter);
 
 
 app.listen(port, () => {
