@@ -46,4 +46,32 @@ const getOrder = async (req, res) => {
   }
 };
 
-module.exports = { saveOrder, getOrder };
+
+
+const searchOrder = async (req, res) => {
+  const { search_query } = req.query;
+
+  try {
+    const orders = await Order.find({});
+
+    const allItems = orders.map(order => {
+      return order.items;
+    });
+
+    let filterData = [];
+
+    allItems.forEach(item => {
+      item.forEach(i => {
+        if (i.name.toLowerCase().includes(search_query.toLowerCase())) {
+          filterData.push(i);
+        }
+      });
+    });
+
+    res.status(200).json({ message: 'Products fetched successfully', data: filterData });
+  } catch (error) {
+    res.status(error.code).json({ message: error.message });
+  }
+};
+
+module.exports = { saveOrder, getOrder, searchOrder };

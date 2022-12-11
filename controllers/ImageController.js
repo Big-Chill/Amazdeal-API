@@ -48,6 +48,20 @@ const getProducts = (req, res) => {
   }
 };
 
+const searchProducts = async (req, res) => {
+  const { search_query } = req.query;
+
+  try {
+    const products = await ProductImages.find({});
+    const filteredProducts = products.filter(product => {
+      return product.name.toLowerCase().includes(search_query.toLowerCase());
+    });
+    res.status(200).json({ message: 'Products fetched successfully', data: filteredProducts });
+  } catch (error) {
+    res.status(error.code).json({ message: error.message });
+  }
+};
 
 
-module.exports = { uploadImage, saveDetails, getProducts };
+
+module.exports = { uploadImage, saveDetails, getProducts, searchProducts };

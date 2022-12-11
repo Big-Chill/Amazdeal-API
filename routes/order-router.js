@@ -7,5 +7,6 @@ router.use(checkAuth);
 
 router.post('/save', OrderController.saveOrder);
 router.get('/get/:user_id', OrderController.getOrder);
+router.get('/search', OrderController.searchOrder);
 
 module.exports = router;

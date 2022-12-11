@@ -6,6 +6,7 @@ const router = express.Router();
 
 
 router.get('/products', ImageController.getProducts);
+router.get('/search', ImageController.searchProducts);
 
 router.use(checkAuth);
 router.use(isSeller);
